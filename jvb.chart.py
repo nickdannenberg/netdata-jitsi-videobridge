@@ -5,7 +5,7 @@ from bases.FrameworkServices.UrlService import UrlService
 from json import loads
 
 ORDER = [
-    'overview'
+    'overview',
     #"conferences",
     #"participants",
     #"largest_conference",
@@ -135,7 +135,7 @@ CHARTS = {
 
     'conference_events': {
         'options': [ None,
-                     'Creation and completion of conferences'
+                     'Creation and completion of conferences',
                      'count', 'conference_events', 'conference_events', 'lines'
         ],
         'lines': [
