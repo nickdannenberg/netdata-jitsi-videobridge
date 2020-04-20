@@ -174,7 +174,7 @@ class Service(UrlService):
         UrlService.__init__(self, configuration=configuration, name=name)
         self.order = ORDER
         self.definitions = CHARTS
-        self.url = self.configuration.get('url', 'http://localhost/colibri/stats')
+        self.url = self.configuration.get('url', 'http://localhost:8080/colibri/stats')
         self.keys = [l[0] for i in CHARTS.values() for l in i['lines']]
 
 
@@ -185,7 +185,7 @@ class Service(UrlService):
         """
         try:
             data = loads(self._get_raw_data())
-            ret = dict([ (k, data[k]) for k in self.keys])
+            ret = dict([(k, data[k]) for k in self.keys if k in data])
             # post processing of loss rate
             ret['loss_rate_download'] = ret['packet_rate_download']*ret['loss_rate_download']
             ret['loss_rate_upload'] = ret['packet_rate_upload']*ret['loss_rate_upload']
