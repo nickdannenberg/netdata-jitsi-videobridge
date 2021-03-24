@@ -107,8 +107,8 @@ CHARTS = {
         'lines': [
             ['packet_rate_download', 'received'],
             ['packet_rate_upload', 'sent'],
-            ['loss_rate_download', 'lost_received'],
-            ['loss_rate_upload', 'lost_sent']
+            ['incoming_loss', 'lost_received'],
+            ['outgoing_loss', 'lost_sent']
         ]
     },
 
@@ -187,11 +187,13 @@ class Service(UrlService):
             data = loads(self._get_raw_data())
             ret = dict([(k, data[k]) for k in self.keys if k in data])
             # post processing of loss rate
-            ret['loss_rate_download'] = ret['packet_rate_download']*ret['loss_rate_download']
-            ret['loss_rate_upload'] = ret['packet_rate_upload']*ret['loss_rate_upload']
+            if 'outgoing_loss' in ret:
+                ret['incoming_loss'] = ret['packet_rate_download']*ret['incoming_loss']
+                ret['outgoing_loss'] = ret['packet_rate_upload']*ret['outgoing_loss']
+
             # turn upload rates negative
             for k in self.keys:
-                if k.find('upload')>-1:
+                if k == 'outgoing_loss' or k.find('upload')>-1:
                     ret[k] = -1*ret[k]
             return ret
         except (ValueError, AttributeError):
