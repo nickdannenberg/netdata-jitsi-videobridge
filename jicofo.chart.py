@@ -50,30 +50,22 @@ CHARTS = {
     'conference_sizes': {
         'options': [ None,
                      'Conference size distribution',
-                     'size', 'conference_sizes', 'conference_sizes', 'stacked'
+                     'size', 'conference_sizes', 'conference_sizes', 'lines'
         ],
         'lines': [
-            ['1participant', '1'],
-            ['2participant', '2'],
-            ['3participant', '3'],
-            ['4participant', '4'],
-            ['5participant', '5'],
-            ['6participant', '6'],
-            ['7participant', '7'],
-            ['8participant', '8'],
-            ['9participant', '9'],
-            ['10participant', '10'],
-            ['11participant', '11'],
-            ['12participant', '12'],
-            ['13participant', '13'],
-            ['14participant', '14'],
-            ['15participant', '15'],
-            ['16participant', '16'],
-            ['17participant', '17'],
-            ['18participant', '18'],
-            ['19participant', '19'],
-            ['20participant', '20'],
-            ['21participant', '21+'],
+             ['0_to_1', '0 to 1'],
+             ['1_to_2', '1 to 2'],
+             ['2_to_3', '2 to 3'],
+             ['3_to_5', '3 to 5'],
+             ['5_to_10', '5 to 10'],
+             ['10_to_20', '10 to 20'],
+             ['20_to_50', '20 to 50'],
+             ['50_to_100', '50 to 100'],
+             ['100_to_200', '100 to 200'],
+             ['200_to_300', '200 to 300'],
+             ['300_to_400', '300 to 400'],
+             ['400_to_500', '400 to 500'],
+             ['500_to_max', '500 to max'],
         ]
     },
 
@@ -98,14 +90,9 @@ class Service(UrlService):
             data = loads(self._get_raw_data())
             ret = dict([(k, data[k]) for k in self.keys if k in data])
             # conference_sizes
-            c = data['conference_sizes']
-            some = False
-            for i in range( 1, min( len(c), 22)):
-                if c[i]>0:
-                    some = True
-                    ret[str(i)+'participant'] = c[i]
-            if not(some): # return empty record for this graph
-                ret['1participant'] = 0
+            c = data['conference_sizes']['buckets']
+            for i in c:
+              ret[i]=c[i]
             # bridges
             ret['operational_bridge_count'] = data['bridge_selector']['operational_bridge_count']
             ret['bridge_count'] = data['bridge_selector']['bridge_count']
